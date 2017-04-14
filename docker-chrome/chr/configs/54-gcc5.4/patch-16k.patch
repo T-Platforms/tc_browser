@@ -1,0 +1,35 @@
+diff --git a/third_party/WebKit/Source/wtf/allocator/PageAllocator.h b/third_party/WebKit/Source/wtf/allocator/PageAllocator.h
+index 59bc7ea..f5cc848 100644
+--- a/third_party/WebKit/Source/wtf/allocator/PageAllocator.h
++++ b/third_party/WebKit/Source/wtf/allocator/PageAllocator.h
+@@ -42,7 +42,7 @@ namespace WTF {
+ #if OS(WIN)
+ static const size_t kPageAllocationGranularityShift = 16; // 64KB
+ #else
+-static const size_t kPageAllocationGranularityShift = 12; // 4KB
++static const size_t kPageAllocationGranularityShift = 14;  // 4KB
+ #endif
+ static const size_t kPageAllocationGranularity = 1 << kPageAllocationGranularityShift;
+ static const size_t kPageAllocationGranularityOffsetMask = kPageAllocationGranularity - 1;
+@@ -50,7 +50,7 @@ static const size_t kPageAllocationGranularityBaseMask = ~kPageAllocationGranula
+ 
+ // All Blink-supported systems have 4096 sized system pages and can handle
+ // permissions and commit / decommit at this granularity.
+-static const size_t kSystemPageSize = 4096;
++static const size_t kSystemPageSize = 16384;
+ static const size_t kSystemPageOffsetMask = kSystemPageSize - 1;
+ static const size_t kSystemPageBaseMask = ~kSystemPageOffsetMask;
+ 
+diff --git a/third_party/WebKit/Source/wtf/allocator/PartitionAlloc.h b/third_party/WebKit/Source/wtf/allocator/PartitionAlloc.h
+index 1939094..0553a5c 100644
+--- a/third_party/WebKit/Source/wtf/allocator/PartitionAlloc.h
++++ b/third_party/WebKit/Source/wtf/allocator/PartitionAlloc.h
+@@ -123,7 +123,7 @@ static const size_t kBucketShift = (kAllocationGranularity == 8) ? 3 : 2;
+ // system page of the span. For our current max slot span size of 64k and other
+ // constant values, we pack _all_ partitionAllocGeneric() sizes perfectly up
+ // against the end of a system page.
+-static const size_t kPartitionPageShift = 14; // 16KB
++static const size_t kPartitionPageShift = 16;  // 16KB
+ static const size_t kPartitionPageSize = 1 << kPartitionPageShift;
+ static const size_t kPartitionPageOffsetMask = kPartitionPageSize - 1;
+ static const size_t kPartitionPageBaseMask = ~kPartitionPageOffsetMask;
