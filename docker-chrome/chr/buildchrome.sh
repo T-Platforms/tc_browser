@@ -49,5 +49,9 @@ mkdir $OUT_DIR
 cp "$CONFIG_DIR/args.gn" $OUT_DIR/args.gn
 gn gen "$OUT_DIR"
 
+if [ -f $CONFIG_DIR/prebuild_hooks.sh ]; then
+    source  $CONFIG_DIR/prebuild_hooks.sh
+fi
+
 # Start build
 ninja -C $OUT_DIR chrome chrome_sandbox

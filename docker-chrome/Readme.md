@@ -55,7 +55,7 @@
 * Docker container runs as nonroot user `builder`(uid=1000). Thus it is recommended to clone repo and run all commands with host user having same uid value. Also you can create new user in image having desired uid.
 * Docker image is built with dependencies for 56.0.2924.122 version of chrome. It is sufficient for building chromium of 54-57 versions, but may require update for newer chromiums versions.
 * Docker image already contains gcc-5.4 croos compilation toolchain. In order to build with other toolchains you must install them to ``chr/toolchains/``
-* Most of predefined configurations in ``chr/configs`` were tested with "baikal-rootfs-chromedeps" sysyroot that can be downloaded at [todo add link to ftp]
+* Most of the predefined configurations in ``chr/configs`` were tested with "baikal-rootfs-chromedeps" sysyroot that can be downloaded at [todo add link to ftp]
 * If directory `chr/chromium/src` missing, then ``build.sh`` will automatically clone chromium sources to ``chr/chromium/src``. Chromium repo have huge size(about 17GB), so it may take long time. If you already have chromium checkout you can manualy copy (or symlink) it to `chr/chromium`.
 * Note that build script automatically makes checkout to specified commit/tag and discards all uncommited cahnges and removes all untracked files/dirs, so be carefull!
 
