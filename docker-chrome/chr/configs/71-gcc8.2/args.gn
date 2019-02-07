@@ -1,0 +1,17 @@
+is_clang = false
+is_debug = false
+mips_arch_variant = "r5"
+target_os = "linux"
+target_cpu = "mipsel"
+enable_nacl=false
+is_component_build = false
+linux_use_bundled_binutils = false
+use_gold = false
+remove_webcore_debug_symbols=true
+v8_os_page_size = "16"
+proprietary_codecs = true
+ffmpeg_branding = "Chrome"
+treat_warnings_as_errors = false
+mips_fpu_mode="fpxx"
+target_sysroot="//build/linux/debian_sid_mips-sysroot"
+system_libdir="lib/mipsel-linux-gnu"

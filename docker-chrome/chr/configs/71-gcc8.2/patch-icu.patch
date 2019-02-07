@@ -1,0 +1,12 @@
+diff --git a/third_party/icu/source/i18n/double-conversion-utils.h b/third_party/icu/source/i18n/double-conversion-utils.h
+index e3f088d..f2db8ad 100644
+--- a/third_party/icu/source/i18n/double-conversion-utils.h
++++ b/third_party/icu/source/i18n/double-conversion-utils.h
+@@ -85,6 +85,7 @@ inline void abort_noreturn() { abort(); }
+     defined(__sparc__) || defined(__sparc) || defined(__s390__) || \
+     defined(__SH4__) || defined(__alpha__) || \
+     defined(_MIPS_ARCH_MIPS32R2) || \
++    defined(_MIPS_ARCH_MIPS32R5) || \
+     defined(__AARCH64EL__) || defined(__aarch64__) || \
+     defined(__riscv)
+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1

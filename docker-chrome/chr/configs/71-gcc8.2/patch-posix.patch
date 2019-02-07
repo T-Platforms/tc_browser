@@ -1,0 +1,13 @@
+diff --git a/build/config/posix/BUILD.gn b/build/config/posix/BUILD.gn
+index 43655a6..d0bdd34 100644
+--- a/build/config/posix/BUILD.gn
++++ b/build/config/posix/BUILD.gn
+@@ -129,6 +129,8 @@ config("runtime_library") {
+       ldflags += [
+         "-L" + ld_path,
+         "-Wl,-rpath-link=" + ld_path,
++        "-B" + ld_path,
++        "-B" + ld_path + "/../gcc/mipsel-linux-gnu/8",
+       ]
+     }
+   }

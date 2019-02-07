@@ -1,0 +1,15 @@
+diff --git a/third_party/webrtc/BUILD.gn b/third_party/webrtc/BUILD.gn
+index 107cde7..a150dba 100644
+--- a/third_party/webrtc/BUILD.gn
++++ b/third_party/webrtc/BUILD.gn
+@@ -329,6 +329,10 @@ config("common_config") {
+     if (mips_arch_variant == "r2") {
+       defines += [ "MIPS32_R2_LE" ]
+     }
++# NDZ Use R2 code for r5 CPU for now
++    if (mips_arch_variant == "r5") {
++      defines += [ "MIPS32_R2_LE" ]
++    }
+     if (mips_dsp_rev == 1) {
+       defines += [ "MIPS_DSP_R1_LE" ]
+     } else if (mips_dsp_rev == 2) {

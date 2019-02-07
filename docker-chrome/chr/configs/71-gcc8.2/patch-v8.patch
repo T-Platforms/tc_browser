@@ -1,0 +1,79 @@
+diff --git a/v8/BUILD.gn b/v8/BUILD.gn
+index 83f1fdb..a7c62df 100644
+--- a/v8/BUILD.gn
++++ b/v8/BUILD.gn
+@@ -461,6 +461,15 @@ config("toolchain") {
+       if (mips_use_msa) {
+         defines += [ "_MIPS_MSA" ]
+       }
++    } else if (mips_arch_variant == "r5") {
++      defines += [ "_MIPS_ARCH_MIPS32R5" ]
++      if (mips_fpu_mode == "fp64") {
++        defines += [ "FPU_MODE_FP64" ]
++      } else if (mips_fpu_mode == "fpxx") {
++        defines += [ "FPU_MODE_FPXX" ]
++      } else if (mips_fpu_mode == "fp32") {
++        defines += [ "FPU_MODE_FP32" ]
++      }
+     } else if (mips_arch_variant == "r2") {
+       defines += [ "_MIPS_ARCH_MIPS32R2" ]
+       if (mips_fpu_mode == "fp64") {
+diff --git a/v8/src/mips/assembler-mips.cc b/v8/src/mips/assembler-mips.cc
+index ee39c52..3dc3fbd 100644
+--- a/v8/src/mips/assembler-mips.cc
++++ b/v8/src/mips/assembler-mips.cc
+@@ -107,6 +107,10 @@ void CpuFeatures::ProbeImpl(bool cross_compile) {
+ #if defined(_MIPS_ARCH_MIPS32RX)
+   if (cpu.architecture() == 6) {
+     supported_ |= 1u << MIPSr6;
++  } else if (cpu.architecture() == 5) {
++// NDZ Use MIPSr2 for 5 for now
++    supported_ |= 1u << MIPSr1;
++    supported_ |= 1u << MIPSr2;
+   } else if (cpu.architecture() == 2) {
+     supported_ |= 1u << MIPSr1;
+     supported_ |= 1u << MIPSr2;
+diff --git a/v8/src/mips/constants-mips.h b/v8/src/mips/constants-mips.h
+index 54eb0a6..0892f6b 100644
+--- a/v8/src/mips/constants-mips.h
++++ b/v8/src/mips/constants-mips.h
+@@ -19,6 +19,8 @@
+ enum ArchVariants {
+   kMips32r1 = v8::internal::MIPSr1,
+   kMips32r2 = v8::internal::MIPSr2,
++// NDZ Use MIPSr2 for p5600 for now
++  kMips32r5 = v8::internal::MIPSr2,
+   kMips32r6 = v8::internal::MIPSr6,
+   kLoongson
+ };
+@@ -27,6 +29,8 @@ enum ArchVariants {
+   static const ArchVariants kArchVariant = kMips32r2;
+ #elif _MIPS_ARCH_MIPS32R6
+   static const ArchVariants kArchVariant = kMips32r6;
++#elif _MIPS_ARCH_MIPS32R5
++  static const ArchVariants kArchVariant = kMips32r5;
+ #elif _MIPS_ARCH_LOONGSON
+ // The loongson flag refers to the LOONGSON architectures based on MIPS-III,
+ // which predates (and is a subset of) the mips32r2 and r1 architectures.
+@@ -64,7 +68,7 @@ enum FpuMode {
+ #elif defined(FPU_MODE_FP64)
+   static const FpuMode kFpuMode = kFP64;
+ #elif defined(FPU_MODE_FPXX)
+-#if defined(_MIPS_ARCH_MIPS32R2) || defined(_MIPS_ARCH_MIPS32R6)
++#if defined(_MIPS_ARCH_MIPS32R2) || defined(_MIPS_ARCH_MIPS32R5) || defined(_MIPS_ARCH_MIPS32R6)
+ static const FpuMode kFpuMode = kFPXX;
+ #else
+ #error "FPXX is supported only on Mips32R2 and Mips32R6"
+diff --git a/v8/tools/testrunner/base_runner.py b/v8/tools/testrunner/base_runner.py
+index fcb2202..e026fe2 100644
+--- a/v8/tools/testrunner/base_runner.py
++++ b/v8/tools/testrunner/base_runner.py
+@@ -617,7 +617,7 @@ class BaseTestRunner(object):
+   def _get_statusfile_variables(self, options):
+     simd_mips = (
+       self.build_config.arch in ['mipsel', 'mips', 'mips64', 'mips64el'] and
+-      self.build_config.mips_arch_variant == "r6" and
++      self.build_config.mips_arch_variant in ['r5', 'r6'] and
+       self.build_config.mips_use_msa)
+ 
+     mips_arch_variant = (

@@ -1,0 +1,11 @@
+diff --git a/components/os_crypt/features.gni b/components/os_crypt/features.gni
+index f67c8b9..d42f7fb 100644
+--- a/components/os_crypt/features.gni
++++ b/components/os_crypt/features.gni
+@@ -7,5 +7,5 @@ import("//build/config/ui.gni")
+ declare_args() {
+   # Whether to use libgnome-keyring (deprecated by libsecret).
+   # See http://crbug.com/466975 and http://crbug.com/355223.
+-  use_gnome_keyring = is_desktop_linux && use_glib
++  use_gnome_keyring = false
+ }
