@@ -1,6 +1,7 @@
 Build notes
 ===========
 
+```
 Download the build system: git@gitlab.tpl:common/tc_browser.git, branch master.
 
 Sources
@@ -216,4 +217,4 @@ Useful external links
 
 https://chromium.googlesource.com/chromium/src/+/master/docs/linux_build_instructions.md
 https://www.mips.com/products/architectures/mips32-2/
-
+```
