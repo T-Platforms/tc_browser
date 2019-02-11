@@ -1,0 +1,559 @@
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/browser.install.in /home/ds/ff52/firefox-esr-52.9.0esr/debian/browser.install.in
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/browser.install.in	2018-06-27 01:29:40.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/browser.install.in	2019-01-30 11:50:45.340000000 +0300
+@@ -16,15 +16,15 @@
+ usr/lib/@browser@/libplds4.so
+ %endif
+ %ifndef USE_SYSTEM_NSS
+-usr/lib/@browser@/libfreeblpriv3.chk
++#usr/lib/@browser@/libfreeblpriv3.chk
+ usr/lib/@browser@/libfreeblpriv3.so
+ usr/lib/@browser@/libnss3.so
+ usr/lib/@browser@/libnssckbi.so
+ usr/lib/@browser@/libnssdbm3.so
+ usr/lib/@browser@/libnssutil3.so
+-usr/lib/@browser@/libnssdbm3.chk
++#usr/lib/@browser@/libnssdbm3.chk
+ usr/lib/@browser@/libsmime3.so
+-usr/lib/@browser@/libsoftokn3.chk
++#usr/lib/@browser@/libsoftokn3.chk
+ usr/lib/@browser@/libsoftokn3.so
+ usr/lib/@browser@/libssl3.so
+ %endif
+@@ -43,7 +43,7 @@
+ usr/lib/@browser@/libmozavutil.so
+ %endif
+ %if DEB_BUILD_ARCH == i386 || DEB_BUILD_ARCH == amd64
+-usr/lib/@browser@/libmozsandbox.so
++#usr/lib/@browser@/libmozsandbox.so
+ %endif
+ 
+ usr/lib/@browser@/defaults/pref/channel-prefs.js
+@@ -83,11 +83,11 @@
+ usr/lib/@browser@/gmp-clearkey/0.1/libclearkey.so
+ 
+ %if CRASH_REPORTER
+-usr/lib/@browser@/crashreporter
+-usr/lib/@browser@/minidump-analyzer
+-usr/lib/@browser@/Throbber-small.gif
+-usr/lib/@browser@/crashreporter.ini
+-usr/lib/@browser@/browser/crashreporter-override.ini
++#usr/lib/@browser@/crashreporter
++#usr/lib/@browser@/minidump-analyzer
++#usr/lib/@browser@/Throbber-small.gif
++#usr/lib/@browser@/crashreporter.ini
++#usr/lib/@browser@/browser/crashreporter-override.ini
+ %endif
+ 
+ usr/lib/@browser@/fonts/EmojiOneMozilla.ttf
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/browser.mozconfig.in /home/ds/ff52/firefox-esr-52.9.0esr/debian/browser.mozconfig.in
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/browser.mozconfig.in	2018-06-27 01:29:40.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/browser.mozconfig.in	2019-01-31 13:09:51.420000000 +0300
+@@ -1,9 +1,48 @@
+ # Please don't use this mozconfig unless you are planning to build
+ # packages for Debian or a derivative.
+ . $topsrcdir/browser/config/mozconfig
++export PKG_CONFIG_PATH=/usr/lib/mipsel-linux-gnu/pkgconfig:$PKG_CONFIG_PATH
++
++
+ ac_add_options --with-app-name=@browser@
+ ac_add_options --enable-release
+ ac_add_options --prefix=/usr
++ac_add_options --disable-gamepad
++ac_add_options --disable-rust
++ac_add_options --disable-webrtc
++ac_add_options --disable-crashreporter
++ac_add_options --disable-tests
++ac_add_options --disable-strip
++ac_add_options --disable-install-strip
++ac_add_options --disable-updater
++ac_add_options --enable-pie
++ac_add_options --enable-startup-notification
++ac_add_options --disable-gconf
++ac_add_options --enable-readline
++ac_add_options --enable-alsa
++ac_add_options --host=x86_64-pc-linux-gnu
++ac_add_options --target=mipsel-linux-gnu
++#ac_add_options --with-float-abi=hard
++
++
++#ac_add_options --disable-methodjit
++#ac_add_options --disable-monoic
++#ac_add_options --disable-polyic
++#ac_add_options --disable-tracejit
++#ac_add_options --disable-ion
++#ac_add_options --disable-yarr-jit
++#ac_add_options --disable-elf-hack
++
++#ac_add_options --enable-system-ffi
++ac_add_options --enable-default-toolkit=cairo-gtk3
++#ac_add_options --with-system-zlib
++#ac_add_options --with-system-bz2
++#ac_add_options --enable-system-hunspell
++#ac_add_options --with-system-nspr
++#ac_add_options --with-system-nss
++#ac_add_options --enable-system-sqlite
++#ac_add_options --with-system-libvpx
++
+ %if GTK3
+ ac_add_options --enable-default-toolkit=cairo-gtk3
+ %else
+@@ -16,14 +55,11 @@
+ %if USE_SYSTEM_BZ2
+ ac_add_options --with-system-bz2 # MOZ_SYSTEM_BZ2=1
+ %endif
+-ac_add_options --disable-gconf
+-ac_add_options --enable-readline
++
+ %if USE_SYSTEM_HUNSPELL
+ ac_add_options --enable-system-hunspell # MOZ_SYSTEM_HUNSPELL=1
+ %endif
+-ac_add_options --disable-strip
+-ac_add_options --disable-install-strip
+-ac_add_options --enable-startup-notification
++
+ %if USE_SYSTEM_FFI
+ ac_add_options --enable-system-ffi # MOZ_SYSTEM_FFI=1
+ %endif
+@@ -42,9 +78,8 @@
+ %if USE_SYSTEM_VPX
+ ac_add_options --with-system-libvpx # MOZ_SYSTEM_LIBVPX=1
+ %endif
+-ac_add_options --disable-updater
+-ac_add_options --enable-pie
++
+ %if BUILD_RUST
+ ac_add_options --enable-rust
+ %endif
+-ac_add_options --enable-alsa
++
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/control /home/ds/ff52/firefox-esr-52.9.0esr/debian/control
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/control	2018-06-27 01:33:25.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/control	2019-02-01 14:34:57.440000000 +0300
+@@ -5,7 +5,7 @@
+ Uploaders: Mike Hommey <glandium@debian.org>
+ Build-Depends: autotools-dev,
+                debhelper (>= 9.20160114),
+-               autoconf2.13,
++               autoconf2.13 [all],
+                libx11-dev,
+                libx11-xcb-dev,
+                libxt-dev,
+@@ -17,29 +17,26 @@
+                zlib1g-dev,
+                libbz2-dev,
+                libreadline-dev,
+-               python2.7,
+-               python-minimal (>= 2.6.6-13~),
+-               python-ply,
++               python2.7 [amd64],
++               python-minimal (>= 2.6.6-13~) [amd64],
++               python-ply [amd64],
+                dpkg-dev (>= 1.16.1.1~),
+-               libvpx-dev (>= 1.5.0),
+-               libhunspell-dev (>= 1.2),
+                libdbus-glib-1-dev,
+-               libasound2-dev [linux-any],
+-               libiw-dev [linux-any],
++               libasound2-dev [any],
++               libiw-dev [any],
+                libnotify-dev,
+                libffi-dev,
+-               libevent-dev (>= 1.4.1),
+                libjsoncpp-dev,
+                mesa-common-dev,
+                libpulse-dev,
+-               yasm (>= 1.1),
++               yasm (>= 1.1) [amd64],
+                zip,
+                unzip,
+-               locales,
++               locales [all],
+                xvfb,
+                xfonts-base,
+                xauth,
+-               ttf-bitstream-vera,
++               ttf-bitstream-vera [all],
+                fonts-freefont-ttf,
+                fonts-dejima-mincho,
+                iso-codes
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/control.in /home/ds/ff52/firefox-esr-52.9.0esr/debian/control.in
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/control.in	2018-06-27 01:29:40.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/control.in	2019-01-31 09:57:24.028000000 +0300
+@@ -16,7 +16,7 @@
+                gcc-6,
+                g++-6,
+ %endif
+-               autoconf2.13,
++               autoconf2.13 [all],
+                libx11-dev,
+                libx11-xcb-dev,
+                libxt-dev,
+@@ -34,9 +34,9 @@
+                libbz2-dev,
+ %endif
+                libreadline-dev,
+-               python2.7,
+-               python-minimal (>= 2.6.6-13~),
+-               python-ply,
++               python2.7 [amd64],
++               python-minimal (>= 2.6.6-13~) [amd64],
++               python-ply [amd64],
+                dpkg-dev (>= 1.16.1.1~),
+ %if USE_SYSTEM_NSPR
+                libnspr4-dev (>= 2:4.13.1~),
+@@ -54,8 +54,8 @@
+                libhunspell-dev (>= 1.2),
+ %endif
+                libdbus-glib-1-dev,
+-               libasound2-dev [linux-any],
+-               libiw-dev [linux-any],
++               libasound2-dev [any],
++               libiw-dev [any],
+                libnotify-dev,
+ %if USE_SYSTEM_FFI
+                libffi-dev,
+@@ -66,18 +66,18 @@
+                libjsoncpp-dev,
+                mesa-common-dev,
+                libpulse-dev,
+-               yasm (>= 1.1),
++               yasm (>= 1.1) [amd64],
+ %if RUST
+                rustc (>= 1.10) [amd64 i386],
+                cargo (>= 0.13) [amd64 i386],
+ %endif
+                zip,
+                unzip,
+-               locales,
++               locales [all],
+                xvfb,
+                xfonts-base,
+                xauth,
+-               ttf-bitstream-vera,
++               ttf-bitstream-vera [all],
+                fonts-freefont-ttf,
+                fonts-dejima-mincho,
+                iso-codes
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/noinstall.in /home/ds/ff52/firefox-esr-52.9.0esr/debian/noinstall.in
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/noinstall.in	2018-06-27 01:29:40.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/noinstall.in	2019-01-30 10:15:51.336000000 +0300
+@@ -4,5 +4,4 @@
+ usr/lib/@browser@/@browser@-bin
+ usr/lib/@browser@/browser/defaults/preferences/firefox-l10n.js
+ usr/lib/@browser@/dictionaries
+-usr/include/@browser@-@GRE_VERSION@/testing
+ usr/lib/@browser@-devel-@GRE_VERSION@/sdk/bin/ply
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/force-fp64+32 /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/force-fp64+32
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/force-fp64+32	1970-01-01 03:00:00.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/force-fp64+32	2019-02-01 12:38:02.364000000 +0300
+@@ -0,0 +1,57 @@
++Description: force fp64+32
++ TODO: Put a short summary on the line above and replace this paragraph
++ with a longer explanation of this change. Complete the meta-information
++ with other relevant fields (see below for details). To make it easier, the
++ information below has been extracted from the changelog. Adjust it or drop
++ it.
++ .
++ firefox-esr (52.9.0esr-1~deb9u1) stretch-security; urgency=medium
++ .
++   * New upstream release.
++   * Fixes for mfsa2018-17, also known as:
++     CVE-2018-12359, CVE-2018-12360, CVE-2018-12362, CVE-2018-5156,
++     CVE-2018-12363, CVE-2018-12364, CVE-2018-12365, CVE-2018-12366,
++     CVE-2018-12368, CVE-2018-5188.
++ .
++   * intl/icu_sources_data.py: Add --disable-layoutex when running ICU
++     configure. bz#1462859.
++Author: Mike Hommey <glandium@debian.org>
++
++---
++The information above should follow the Patch Tagging Guidelines, please
++checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
++are templates for supplementary fields that you might want to add:
++
++Origin: <vendor|upstream|other>, <url of original patch>
++Bug: <url in upstream bugtracker>
++Bug-Debian: https://bugs.debian.org/<bugnumber>
++Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
++Forwarded: <no|not-needed|url proving that it has been forwarded>
++Reviewed-By: <name and email of someone who approved the patch>
++Last-Update: 2019-02-01
++
++--- firefox-esr-52.9.0esr.orig/js/src/moz.build
+++++ firefox-esr-52.9.0esr/js/src/moz.build
++@@ -554,8 +554,8 @@ elif CONFIG['JS_CODEGEN_MIPS32'] or CONF
++             'jit/mips32/SharedIC-mips32.cpp',
++             'jit/mips32/Trampoline-mips32.cpp',
++         ]
++-#        CFLAGS += ['-mfp32']
++-#        CXXFLAGS += ['-mfp32']
+++        CFLAGS += ['-mfp32']
+++        CXXFLAGS += ['-mfp32']
++         if CONFIG['JS_SIMULATOR_MIPS32']:
++             UNIFIED_SOURCES += [
++                 'jit/mips32/Simulator-mips32.cpp'
++--- firefox-esr-52.9.0esr.orig/other-licenses/bsdiff/moz.build
+++++ firefox-esr-52.9.0esr/other-licenses/bsdiff/moz.build
++@@ -27,7 +27,7 @@ LOCAL_INCLUDES += [
++     '/toolkit/mozapps/update/updater',
++ ]
++ 
++-CFLAGS += ['-mfp32']
++-CXXFLAGS += ['-mfp32']
+++#CFLAGS += ['-mfp32']
+++#CXXFLAGS += ['-mfp32']
++ 
++ HOST_CXXFLAGS += CONFIG['MOZ_BZ2_CFLAGS']
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/force-fr=0 /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/force-fr=0
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/force-fr=0	1970-01-01 03:00:00.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/force-fr=0	2019-02-01 11:08:18.860000000 +0300
+@@ -0,0 +1,55 @@
++Description: force fr=0
++ TODO: Put a short summary on the line above and replace this paragraph
++ with a longer explanation of this change. Complete the meta-information
++ with other relevant fields (see below for details). To make it easier, the
++ information below has been extracted from the changelog. Adjust it or drop
++ it.
++ .
++ firefox-esr (52.9.0esr-1~deb9u1) stretch-security; urgency=medium
++ .
++   * New upstream release.
++   * Fixes for mfsa2018-17, also known as:
++     CVE-2018-12359, CVE-2018-12360, CVE-2018-12362, CVE-2018-5156,
++     CVE-2018-12363, CVE-2018-12364, CVE-2018-12365, CVE-2018-12366,
++     CVE-2018-12368, CVE-2018-5188.
++ .
++   * intl/icu_sources_data.py: Add --disable-layoutex when running ICU
++     configure. bz#1462859.
++Author: Mike Hommey <glandium@debian.org>
++
++---
++The information above should follow the Patch Tagging Guidelines, please
++checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
++are templates for supplementary fields that you might want to add:
++
++Origin: <vendor|upstream|other>, <url of original patch>
++Bug: <url in upstream bugtracker>
++Bug-Debian: https://bugs.debian.org/<bugnumber>
++Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
++Forwarded: <no|not-needed|url proving that it has been forwarded>
++Reviewed-By: <name and email of someone who approved the patch>
++Last-Update: 2019-02-01
++
++--- firefox-esr-52.9.0esr.orig/js/src/moz.build
+++++ firefox-esr-52.9.0esr/js/src/moz.build
++@@ -554,8 +554,8 @@ elif CONFIG['JS_CODEGEN_MIPS32'] or CONF
++             'jit/mips32/SharedIC-mips32.cpp',
++             'jit/mips32/Trampoline-mips32.cpp',
++         ]
++-        CFLAGS += ['-mfp32']
++-        CXXFLAGS += ['-mfp32']
+++#        CFLAGS += ['-mfp32']
+++#        CXXFLAGS += ['-mfp32']
++         if CONFIG['JS_SIMULATOR_MIPS32']:
++             UNIFIED_SOURCES += [
++                 'jit/mips32/Simulator-mips32.cpp'
++--- firefox-esr-52.9.0esr.orig/other-licenses/bsdiff/moz.build
+++++ firefox-esr-52.9.0esr/other-licenses/bsdiff/moz.build
++@@ -27,4 +27,7 @@ LOCAL_INCLUDES += [
++     '/toolkit/mozapps/update/updater',
++ ]
++ 
+++CFLAGS += ['-mfp32']
+++CXXFLAGS += ['-mfp32']
+++
++ HOST_CXXFLAGS += CONFIG['MOZ_BZ2_CFLAGS']
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/js32 /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/js32
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/js32	1970-01-01 03:00:00.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/js32	2019-02-01 08:25:34.872000000 +0300
+@@ -0,0 +1,43 @@
++Description: js-sources forced to use fp32 FP ABI
++ TODO: Put a short summary on the line above and replace this paragraph
++ with a longer explanation of this change. Complete the meta-information
++ with other relevant fields (see below for details). To make it easier, the
++ information below has been extracted from the changelog. Adjust it or drop
++ it.
++ .
++ firefox-esr (52.9.0esr-1~deb9u1) stretch-security; urgency=medium
++ .
++   * New upstream release.
++   * Fixes for mfsa2018-17, also known as:
++     CVE-2018-12359, CVE-2018-12360, CVE-2018-12362, CVE-2018-5156,
++     CVE-2018-12363, CVE-2018-12364, CVE-2018-12365, CVE-2018-12366,
++     CVE-2018-12368, CVE-2018-5188.
++ .
++   * intl/icu_sources_data.py: Add --disable-layoutex when running ICU
++     configure. bz#1462859.
++Author: Mike Hommey <glandium@debian.org>
++
++---
++The information above should follow the Patch Tagging Guidelines, please
++checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
++are templates for supplementary fields that you might want to add:
++
++Origin: <vendor|upstream|other>, <url of original patch>
++Bug: <url in upstream bugtracker>
++Bug-Debian: https://bugs.debian.org/<bugnumber>
++Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
++Forwarded: <no|not-needed|url proving that it has been forwarded>
++Reviewed-By: <name and email of someone who approved the patch>
++Last-Update: 2019-02-01
++
++--- firefox-esr-52.9.0esr.orig/js/src/moz.build
+++++ firefox-esr-52.9.0esr/js/src/moz.build
++@@ -554,6 +554,8 @@ elif CONFIG['JS_CODEGEN_MIPS32'] or CONF
++             'jit/mips32/SharedIC-mips32.cpp',
++             'jit/mips32/Trampoline-mips32.cpp',
++         ]
+++		CFLAGS += ['-mfp32']
+++		CXXFLAGS += ['-mfp32']
++         if CONFIG['JS_SIMULATOR_MIPS32']:
++             UNIFIED_SOURCES += [
++                 'jit/mips32/Simulator-mips32.cpp'
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/js32retry /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/js32retry
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/js32retry	1970-01-01 03:00:00.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/js32retry	2019-02-01 08:55:52.932000000 +0300
+@@ -0,0 +1,45 @@
++Description: retry last commit
++ TODO: Put a short summary on the line above and replace this paragraph
++ with a longer explanation of this change. Complete the meta-information
++ with other relevant fields (see below for details). To make it easier, the
++ information below has been extracted from the changelog. Adjust it or drop
++ it.
++ .
++ firefox-esr (52.9.0esr-1~deb9u1) stretch-security; urgency=medium
++ .
++   * New upstream release.
++   * Fixes for mfsa2018-17, also known as:
++     CVE-2018-12359, CVE-2018-12360, CVE-2018-12362, CVE-2018-5156,
++     CVE-2018-12363, CVE-2018-12364, CVE-2018-12365, CVE-2018-12366,
++     CVE-2018-12368, CVE-2018-5188.
++ .
++   * intl/icu_sources_data.py: Add --disable-layoutex when running ICU
++     configure. bz#1462859.
++Author: Mike Hommey <glandium@debian.org>
++
++---
++The information above should follow the Patch Tagging Guidelines, please
++checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
++are templates for supplementary fields that you might want to add:
++
++Origin: <vendor|upstream|other>, <url of original patch>
++Bug: <url in upstream bugtracker>
++Bug-Debian: https://bugs.debian.org/<bugnumber>
++Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
++Forwarded: <no|not-needed|url proving that it has been forwarded>
++Reviewed-By: <name and email of someone who approved the patch>
++Last-Update: 2019-02-01
++
++--- firefox-esr-52.9.0esr.orig/js/src/moz.build
+++++ firefox-esr-52.9.0esr/js/src/moz.build
++@@ -554,8 +554,8 @@ elif CONFIG['JS_CODEGEN_MIPS32'] or CONF
++             'jit/mips32/SharedIC-mips32.cpp',
++             'jit/mips32/Trampoline-mips32.cpp',
++         ]
++-		CFLAGS += ['-mfp32']
++-		CXXFLAGS += ['-mfp32']
+++        CFLAGS += ['-mfp32']
+++        CXXFLAGS += ['-mfp32']
++         if CONFIG['JS_SIMULATOR_MIPS32']:
++             UNIFIED_SOURCES += [
++                 'jit/mips32/Simulator-mips32.cpp'
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/series /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/series
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/patches/series	2018-06-27 01:33:25.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/patches/series	2019-02-01 12:37:48.392000000 +0300
+@@ -33,3 +33,7 @@
+ debian-hacks/Build-against-system-libjsoncpp.patch
+ debian-hacks/Use-the-Mozilla-Location-Service-key-when-the-Google.patch
+ debian-hacks/Fixup-workaround-for-binutil-assertion-on-mips.patch
++js32
++js32retry
++force-fr=0
++force-fp64+32
+diff -ruN /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/rules /home/ds/ff52/firefox-esr-52.9.0esr/debian/rules
+--- /home/ds/ff52-vanilla/firefox-esr-52.9.0esr/debian/rules	2018-06-27 01:29:40.000000000 +0300
++++ /home/ds/ff52/firefox-esr-52.9.0esr/debian/rules	2019-02-01 14:34:47.936000000 +0300
+@@ -14,18 +14,20 @@
+ $(call lazy,DEB_BUILD_ARCH,$$(shell dpkg-architecture -qDEB_BUILD_ARCH))
+ $(call lazy,DEB_BUILD_ARCH_ENDIAN,$$(shell dpkg-architecture -qDEB_BUILD_ARCH_ENDIAN))
+ 
++export DPKG_COLORS=always
++
+ PYTHON := python -B
+ 
+ PRODUCT := browser
+ include debian/upstream.mk
+ 
+-SYSTEM_LIBS = zlib bz2 hunspell ffi libevent
+-ifeq (,$(filter wheezy jessie stretch,$(DIST)))
+-SYSTEM_LIBS += nspr nss sqlite
+-endif
+-ifeq (,$(filter wheezy jessie,$(DIST)))
+-SYSTEM_LIBS += vpx
+-endif
++SYSTEM_LIBS = zlib bz2  ffi 
++#ifeq (,$(filter wheezy jessie stretch,$(DIST)))
++#SYSTEM_LIBS += nspr nss sqlite
++#endif
++#ifeq (,$(filter wheezy jessie,$(DIST)))
++#SYSTEM_LIBS += vpx hunspell libevent vpx
++#endif
+ 
+ define system_lib
+ USE_SYSTEM_$(1) = 1
+@@ -114,18 +116,22 @@
+ ifneq (,$(filter debug,$(DEB_BUILD_OPTIONS)))
+ 	CONFIGURE_FLAGS += --enable-debug
+ endif
+-ifneq (,$(filter %i386 %amd64,$(DEB_BUILD_ARCH)))
+-	MOZ_FFVPX = 1
+-endif
+-ifneq (,$(filter i386 amd64 armel armhf,$(DEB_BUILD_ARCH)))
+-	CRASH_REPORTER = 1
+-endif
++#ifneq (,$(filter %i386 %amd64,$(DEB_BUILD_ARCH)))
++#	MOZ_FFVPX = 1
++#endif
++#ifneq (,$(filter i386 amd64 armel armhf,$(DEB_BUILD_ARCH)))
++#	CRASH_REPORTER = 1
++#endif
++MOZ_FFVPX = 
++CRASH_REPORTER = 
+ 
+ ifeq (default,$(origin CC))
+-CC := gcc
++CC := mipsel-linux-gnu-gcc
++#CC := colorgcc
+ endif
+ ifeq (default,$(origin CXX))
+-CXX := g++
++CXX := mipsel-linux-gnu-g++
++#CXX := colorgcc
+ endif
+ 
+ ifneq (,$(findstring gcc,$(CC)))
+@@ -137,7 +143,12 @@
+ endif
+ endif
+ 
+-CXXFLAGS = $(CFLAGS)
++
++#CFLAGS += -mips32r5 -mtune=p5600 -EL -mabi=32 -mfp32 -fdiagnostics-color=always
++#CXXFLAGS = $(CFLAGS) -mips32r5 -mtune=p5600 -EL -mabi=32 -mfp32 -fdiagnostics-color=always
++
++CFLAGS += -mips32r5 -mtune=p5600 -EL -mfpxx -mhard-float -fdiagnostics-color=always
++CXXFLAGS = $(CFLAGS) -mips32r5 -mtune=p5600 -EL -mfpxx -mhard-float -fdiagnostics-color=always
+ 
+ ifeq ($(DEB_BUILD_ARCH_ENDIAN),little)
+ ICU_DATA_FILE = icudt58l.dat
+@@ -339,6 +350,9 @@
+ 		rm -rf debian/tmp/usr/include/$($(PRODUCT))-$(GRE_VERSION)/$$h; \
+ 	done
+ 
++	mv debian/tmp$(LIB_DIR)/browser/omni.ja debian/tmp$(LIB_DIR)/browser/omni.ja.old
++	zip -FF debian/tmp$(LIB_DIR)/browser/omni.ja.old --out debian/tmp$(LIB_DIR)/browser/omni.ja
++	rm debian/tmp$(LIB_DIR)/browser/omni.ja.old
+ 	-TZ=UTC unzip -d debian/tmp$(LIB_DIR)/browser debian/tmp$(LIB_DIR)/browser/omni.ja 'defaults/preferences/*'
+ 
+ MPL-1.1: gfx/cairo/cairo/COPYING-MPL-1.1
