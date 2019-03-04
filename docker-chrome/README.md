@@ -77,6 +77,14 @@ ln -s  mipsel-buildroot-linux-gnu-strip mipsel-linux-gnu-strip
 How to build
 ------------
 
+It should be noted that the build process always checks out the vanilla version
+of the browser sources, then applies the patches from configs/71-gcc8.2, and
+finally does the actual build. So, if you want to change something, make a patch
+first and put it in the config/71-gcc8.2 dir. There is also an option to do a
+"jumbo" build, where a bunch of objects are merged into a single binary. It
+saves compilation/linkage time but eats a lot of memory during the build
+process.
+
 $ cd docker-chrome
 $ ./build.sh 71-gcc8.2 2>&1 | tee /tmp/build.log
 
@@ -97,6 +105,25 @@ cd chromium/src/out/71-gcc8.2
 tar -I pigz -cf ../chromium-71.0.3578.80-16k-purer5-MIPSr2-gcc8.2.tar.gz  \
 --exclude='./obj' --exclude='./gen' --exclude='./clang_x86_v8_mipsel' \
 --exclude='./x64'  --exclude='./clang_x86' ./
+
+Installation and usage
+----------------------
+
+Untar the tarball to local dir in /home/user.  Set the SUID permissions on the
+chrome-sandbox file:
+
+sudo chown root:root chrome-sandbox
+sudo chmod 4755 chrome-sandbox
+
+If you do not set the SUID bit, chromium can only be run with --no-sandbox
+command option. To make sure the built chromium uses its own environment, use
+the option --user-data-dir:
+
+./chrome-wrapper --user-data-dir=~/.ch71
+
+The proxy can only be specifed on the command line:
+
+./chrome-wrapper --proxy-server=IP_ADDRESS:3128
 
 SIMD accelerations
 ------------------
