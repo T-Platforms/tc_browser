@@ -32,7 +32,7 @@ index 148e913..a698067 100644
 +        }
 +        if (mips_use_msa == true) {
 +          cflags += [
-+            "-mmsa",
++            "-mmsa", "-flax-vector-conversions",
 +            "-mfp64",
 +            "-mno-odd-spreg",
 +          ]

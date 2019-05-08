@@ -1,17 +1,52 @@
-is_clang = false
-is_debug = false
-mips_arch_variant = "r5"
-target_os = "linux"
-target_cpu = "mipsel"
-enable_nacl=false
-is_component_build = false
-linux_use_bundled_binutils = false
-use_gold = false
-remove_webcore_debug_symbols=true
-v8_os_page_size = "16"
-proprietary_codecs = true
+# Initial args proven to deliver a succesful build
+is_clang                     = false
+is_debug                     = false
+mips_arch_variant            = "r5"
+target_os                    = "linux"
+target_cpu                   = "mipsel"
+enable_nacl                  = false
+linux_use_bundled_binutils   = false
+use_gold                     = false
+remove_webcore_debug_symbols = true
+v8_os_page_size              = "16"
+proprietary_codecs           = true
+rtc_use_h264                 = true
+treat_warnings_as_errors     = false
+target_sysroot               = "//build/linux/debian_sid_mips-sysroot"
+system_libdir                = "lib/mipsel-linux-gnu"
+libyuv_use_msa               = true
+mips_use_msa                 = true
+enable_iterator_debugging    = false
+is_component_ffmpeg          = false
+optimize_webui               = true
+strip_debug_info             = true
+use_system_freetype          = true
+use_system_lcms2             = false
+use_system_libjpeg           = true
+use_system_libpng            = true
+use_system_zlib              = true
+blink_gc_plugin_option_do_dump_graph = false
+
+
+# Patch that replaces #ifdefs in Chromium's pre-generated 
+# 'config.h' for mipsel, is doing so only for 'Chrome' 
+# branding, so changing this will screw up MSA support
 ffmpeg_branding = "Chrome"
-treat_warnings_as_errors = false
-mips_fpu_mode="fpxx"
-target_sysroot="//build/linux/debian_sid_mips-sysroot"
-system_libdir="lib/mipsel-linux-gnu"
+media_use_libvpx = false
+
+# Component build will fail because ldd won't be able
+# to link MSA-enabled libjpeg-turbo & libpng
+is_component_build = false
+
+# FP64A also defined in ffmpeg build script, 
+# so changing it here for 'fpxx' will break build
+mips_fpu_mode = "fp64"
+
+# Promises about 8-10% speed up for Chromium UI,
+# though, in fact, increases build time by ~30% 
+# and FTBFS with MSA-enabled libs
+use_v8_context_snapshot = false
+
+# WebGL support with rendering on CPU
+# could be tested on globe.chromeexperiments.com
+enable_swiftshader = false

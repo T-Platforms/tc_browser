@@ -1,0 +1,171 @@
+diff --git a/ffmpeg_generated.gni b/ffmpeg_generated.gni
+index 8ac532b6c3..e3deeefcdb 100644
+--- ./third_party/ffmpeg/ffmpeg_generated.gni
++++ ./third_party/ffmpeg/ffmpeg_generated.gni
+@@ -332,6 +332,7 @@ if ((is_mac) || (is_win) || (use_linux_config && current_cpu == "x64") || (use_l
+ if ((is_android && current_cpu == "mips64el") || (is_android && current_cpu == "mipsel") || (use_linux_config && current_cpu == "mips64el") || (use_linux_config && current_cpu == "mipsel")) {
+   ffmpeg_c_sources += [
+     "libavutil/mips/float_dsp_mips.c",
++    "libavutil/mips/generic_macros_msa.h",
+   ]
+ }
+ 
+@@ -425,21 +426,85 @@ if ((use_linux_config && current_cpu == "arm" && arm_use_neon) || (use_linux_con
+ 
+ if ((use_linux_config && current_cpu == "mips64el") || (use_linux_config && current_cpu == "mipsel")) {
+   ffmpeg_c_sources += [
++    "libavcodec/mips/aaccoder_mips.c",
++    "libavcodec/mips/aacdec_mips.c",
++    "libavcodec/mips/aacpsdsp_mips.c",
++    "libavcodec/mips/aacsbr_mips.c",
++    "libavcodec/mips/ac3dsp_mips.c",
++    "libavcodec/mips/acelp_filters_mips.c",
++    "libavcodec/mips/acelp_vectors_mips.c",
++    "libavcodec/mips/amrwbdec_mips.c",
+     "libavcodec/mips/autorename_libavcodec_mips_videodsp_init.c",
++    "libavcodec/mips/blockdsp_init_mips.c",
++    "libavcodec/mips/blockdsp_msa.c",
++    "libavcodec/mips/celp_filters_mips.c",
++    "libavcodec/mips/constants.c",
++    "libavcodec/mips/fft_mips.c",
++    "libavcodec/mips/fmtconvert_mips.c",
++    "libavcodec/mips/h263dsp_init_mips.c",
++    "libavcodec/mips/h263dsp_msa.c",
++    "libavcodec/mips/h264chroma_init_mips.c",
++    "libavcodec/mips/h264chroma_msa.c",
++    "libavcodec/mips/h264dsp_init_mips.c",
++    "libavcodec/mips/h264dsp_msa.c",
++    "libavcodec/mips/h264idct_msa.c",
+     "libavcodec/mips/h264pred_init_mips.c",
++    "libavcodec/mips/h264pred_msa.c",
++    "libavcodec/mips/h264qpel_init_mips.c",
++    "libavcodec/mips/h264qpel_msa.c",
++    "libavcodec/mips/hevcdsp_init_mips.c",
++    "libavcodec/mips/hevcdsp_msa.c",
++    "libavcodec/mips/hevc_idct_msa.c",
++    "libavcodec/mips/hevc_lpf_sao_msa.c",
++    "libavcodec/mips/hevc_mc_bi_msa.c",
++    "libavcodec/mips/hevc_mc_biw_msa.c",
++    "libavcodec/mips/hevc_mc_uni_msa.c",
++    "libavcodec/mips/hevc_mc_uniw_msa.c",
++    "libavcodec/mips/hevcpred_init_mips.c",
++    "libavcodec/mips/hevcpred_msa.c",
+     "libavcodec/mips/hpeldsp_init_mips.c",
++    "libavcodec/mips/hpeldsp_msa.c",
++    "libavcodec/mips/idctdsp_init_mips.c",
++    "libavcodec/mips/idctdsp_msa.c",
++    "libavcodec/mips/iirfilter_mips.c",
++    "libavcodec/mips/me_cmp_init_mips.c",
++    "libavcodec/mips/me_cmp_msa.c",
++    "libavcodec/mips/mpegaudiodsp_mips_fixed.c",
++    "libavcodec/mips/mpegaudiodsp_mips_float.c",
++    "libavcodec/mips/mpegvideoencdsp_init_mips.c",
++    "libavcodec/mips/mpegvideoencdsp_msa.c",
++    "libavcodec/mips/mpegvideo_init_mips.c",
++    "libavcodec/mips/mpegvideo_msa.c",
++    "libavcodec/mips/pixblockdsp_init_mips.c",
++    "libavcodec/mips/pixblockdsp_msa.c",
++    "libavcodec/mips/qpeldsp_init_mips.c",
++    "libavcodec/mips/qpeldsp_msa.c",
++    "libavcodec/mips/sbrdsp_mips.c",
++    "libavcodec/mips/simple_idct_msa.c",
++    "libavcodec/mips/vc1dsp_init_mips.c",
++    "libavcodec/mips/videodsp_init.c",
+     "libavcodec/mips/vp8dsp_init_mips.c",
++    "libavcodec/mips/vp8_idct_msa.c",
++    "libavcodec/mips/vp8_lpf_msa.c",
++    "libavcodec/mips/vp8_mc_msa.c",
++    "libavcodec/mips/vp9dsp_init_mips.c",
++    "libavcodec/mips/vp9_idct_msa.c",
++    "libavcodec/mips/vp9_intra_msa.c",
++    "libavcodec/mips/vp9_lpf_msa.c",
++    "libavcodec/mips/vp9_mc_msa.c",
++    "libavcodec/mips/wmv2dsp_init_mips.c",
++    "libavcodec/mips/xvididct_init_mips.c",
+   ]
+ }
+ 
+-if ((is_android && current_cpu == "mips64el" && ffmpeg_branding == "Chrome") || (is_android && current_cpu == "mipsel" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "ChromeOS") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "ChromeOS")) {
+-  ffmpeg_c_sources += [
+-    "libavcodec/mips/aacdec_mips.c",
+-    "libavcodec/mips/aacpsdsp_mips.c",
+-    "libavcodec/mips/aacsbr_mips.c",
+-    "libavcodec/mips/sbrdsp_mips.c",
+-  ]
+-}
++# if ((is_android && current_cpu == "mips64el" && ffmpeg_branding == "Chrome") || (is_android && current_cpu == "mipsel" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "ChromeOS") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "ChromeOS")) {
++#   ffmpeg_c_sources += [
++#     "libavcodec/mips/aacdec_mips.c",
++#     "libavcodec/mips/aacpsdsp_mips.c",
++#     "libavcodec/mips/aacsbr_mips.c",
++#     "libavcodec/mips/sbrdsp_mips.c",
++#   ]
++# }
+ 
+ if ((is_android && current_cpu == "arm64") || (use_linux_config && current_cpu == "arm64")) {
+   ffmpeg_c_sources += [
+@@ -512,20 +577,20 @@ if ((is_mac && ffmpeg_branding == "Chrome") || (is_win && ffmpeg_branding == "Ch
+   ]
+ }
+ 
+-if ((is_android && current_cpu == "mips64el") || (use_linux_config && current_cpu == "mips64el")) {
+-  ffmpeg_c_sources += [
+-    "libavcodec/mips/fft_mips.c",
+-    "libavcodec/mips/mpegaudiodsp_mips_float.c",
+-  ]
+-}
++# if ((is_android && current_cpu == "mips64el") || (use_linux_config && current_cpu == "mips64el")) {
++#   ffmpeg_c_sources += [
++#     "libavcodec/mips/fft_mips.c",
++#     "libavcodec/mips/mpegaudiodsp_mips_float.c",
++#   ]
++# }
+ 
+-if ((use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "ChromeOS") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "ChromeOS")) {
+-  ffmpeg_c_sources += [
+-    "libavcodec/mips/h264chroma_init_mips.c",
+-    "libavcodec/mips/h264dsp_init_mips.c",
+-    "libavcodec/mips/h264qpel_init_mips.c",
+-  ]
+-}
++# if ((use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "ChromeOS") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "Chrome") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "ChromeOS")) {
++#   ffmpeg_c_sources += [
++#     "libavcodec/mips/h264chroma_init_mips.c",
++#     "libavcodec/mips/h264dsp_init_mips.c",
++#     "libavcodec/mips/h264qpel_init_mips.c",
++#   ]
++# }
+ 
+ if (use_linux_config && current_cpu == "arm64") {
+   ffmpeg_c_sources += [
+@@ -624,18 +689,18 @@ if ((use_linux_config && current_cpu == "arm" && arm_use_neon && ffmpeg_branding
+   ]
+ }
+ 
+-if ((use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "ChromeOS") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "ChromeOS")) {
+-  ffmpeg_c_sources += [
+-    "libavcodec/mips/blockdsp_init_mips.c",
+-    "libavcodec/mips/h263dsp_init_mips.c",
+-    "libavcodec/mips/idctdsp_init_mips.c",
+-    "libavcodec/mips/me_cmp_init_mips.c",
+-    "libavcodec/mips/mpegvideo_init_mips.c",
+-    "libavcodec/mips/pixblockdsp_init_mips.c",
+-    "libavcodec/mips/qpeldsp_init_mips.c",
+-    "libavcodec/mips/xvididct_init_mips.c",
+-  ]
+-}
++# if ((use_linux_config && current_cpu == "mips64el" && ffmpeg_branding == "ChromeOS") || (use_linux_config && current_cpu == "mipsel" && ffmpeg_branding == "ChromeOS")) {
++#   ffmpeg_c_sources += [
++#     "libavcodec/mips/blockdsp_init_mips.c",
++#     "libavcodec/mips/h263dsp_init_mips.c",
++#     "libavcodec/mips/idctdsp_init_mips.c",
++#     "libavcodec/mips/me_cmp_init_mips.c",
++#     "libavcodec/mips/mpegvideo_init_mips.c",
++#     "libavcodec/mips/pixblockdsp_init_mips.c",
++#     "libavcodec/mips/qpeldsp_init_mips.c",
++#     "libavcodec/mips/xvididct_init_mips.c",
++#   ]
++# }
+ 
+ if ((use_linux_config && current_cpu == "x64" && ffmpeg_branding == "ChromeOS") || (use_linux_config && current_cpu == "x86" && ffmpeg_branding == "ChromeOS")) {
+   ffmpeg_c_sources += [

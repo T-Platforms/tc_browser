@@ -1,0 +1,29 @@
+diff --git a/chromium/scripts/build_ffmpeg.py b/chromium/scripts/build_ffmpeg.py
+old mode 100755
+new mode 100644
+index 309d7b9a00..f77ffc6fd4
+--- ./third_party/ffmpeg/chromium/scripts/build_ffmpeg.py
++++ ./third_party/ffmpeg/chromium/scripts/build_ffmpeg.py
+@@ -695,14 +695,17 @@ def ConfigureAndBuild(target_arch, target_os, host_os, host_arch, parallel_jobs,
+       configure_flags['Common'].extend([
+           '--arch=mipsel',
+           '--disable-mips32r6',
+-          '--disable-mips32r5',
+-          '--disable-mips32r2',
+           '--disable-mipsdsp',
+           '--disable-mipsdspr2',
+-          '--disable-msa',
+           '--enable-mipsfpu',
+-          '--extra-cflags=-march=mipsel',
+-          '--extra-cflags=-mcpu=mips32',
++          '--disable-optimizations',
++          '--disable-asm',
++          '--enable-msa',
++          '--enable-decoder=theora,vp8,vp9',
++          '--enable-parser=vp3,vp8,vp9',
++          '--enable-decoder=mpeg4',
++          '--enable-parser=h263,mpeg4video',
++          '--extra-cflags=-march=mips32r5 -mtune=p5600 -mmsa -mfp64 -mno-odd-spreg -msched-weight -mload-store-pairs -funroll-loops -EL',
+           # Required to avoid errors about dynamic relocation w/o -fPIC.
+           '--extra-ldflags=-z notext',
+       ])
