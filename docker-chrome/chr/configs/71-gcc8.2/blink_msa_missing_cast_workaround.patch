@@ -1,0 +1,35 @@
+--- ./third_party/blink/renderer/platform/cpu/mips/common_macros_msa.h	2019-02-19 15:38:11.226873915 +0300
++++ ./third_party/blink/renderer/platform/cpu/mips/common_macros_msa2.h	2019-02-26 12:12:11.262639591 +0300
+@@ -47,22 +47,22 @@
+ #define ST_SP(...) ST_V(v4f32, __VA_ARGS__)
+ #define ST_DP(...) ST_V(v2f64, __VA_ARGS__)
+ 
+-#ifdef CLANG_BUILD
++//#ifdef CLANG_BUILD
+ #define COPY_DOUBLE_TO_VECTOR(a)                \
+   ({                                            \
+     v2f64 out;                                  \
+     out = (v2f64)__msa_fill_d(*(int64_t*)(&a)); \
+     out;                                        \
+   })
+-#else
+-#define COPY_DOUBLE_TO_VECTOR(a)                \
+-  ({                                            \
+-    v2f64 out;                                  \
+-    out = __msa_cast_to_vector_double(a);       \
+-    out = (v2f64)__msa_splati_d((v2i64)out, 0); \
+-    out;                                        \
+-  })
+-#endif
++//#else
++//#define COPY_DOUBLE_TO_VECTOR(a)                \
++//  ({                                            \
++//    v2f64 out;                                  \
++//    out = __msa_cast_to_vector_double(a);       \
++//    out = (v2f64)__msa_splati_d((v2i64)out, 0); \
++//    out;                                        \
++//  })
++//#endif
+ 
+ #define MSA_STORE_FUNC(TYPE, INSTR, FUNCNAME)               \
+   static inline void FUNCNAME(TYPE val, void* const pdst) { \

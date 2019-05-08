@@ -12,6 +12,12 @@ tag provided in config/vars.sh. For archival purposes, the source tarball
 chromium-browser_71.0.3578.80.source.tar.xz is available, but it is not used for
 building.   
 
+NOTE FOR INCREMENTAL BUILDS:
+After the initial fetch of Chromium source, 
+gn will not track changes made in some third-party libs' sources. 
+Always check the output of `git status` and consider editing paths inside patches.
+
+
 Rootfs
 ------
 

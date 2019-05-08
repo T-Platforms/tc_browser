@@ -1,0 +1,11 @@
+--- ./build/toolchain/linux/BUILD.gn	2019-02-21 12:40:01.221531319 +0300
++++ ./build/toolchain/linux/BUILD2.gn	2019-02-21 12:43:20.141532909 +0300
+@@ -178,7 +178,7 @@
+ }
+ 
+ gcc_toolchain("mipsel") {
+-  toolprefix = "mipsel-linux-gnu-"
++  toolprefix = "mipsel-buildroot-linux-gnu-"
+ 
+   cc = "${toolprefix}gcc"
+   cxx = " ${toolprefix}g++"
