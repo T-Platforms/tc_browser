@@ -80,6 +80,37 @@ ln -s  mipsel-buildroot-linux-gnu-size mipsel-linux-gnu-size
 ln -s  mipsel-buildroot-linux-gnu-strings mipsel-linux-gnu-strings
 ln -s  mipsel-buildroot-linux-gnu-strip mipsel-linux-gnu-strip
 
+Docker notes
+------------
+
+Install docker and read this readme completely before start.
+
+* Docker image automated build is configured at
+  https://hub.docker.com/r/comsgn/mipschrome/
+
+* Docker container runs as nonroot user `builder`(uid=1000). Thus it is
+  recommended to clone repo and run all commands with host user having same uid
+  value.
+
+* Docker image was built with dependencies for Chromium 56.
+  It is sufficient for building chromium of 54-57 versions, and was also used to
+  build Chromium 71 with newer toolchains added locally.
+
+* Docker image already contains gcc-5.4 croos compilation toolchain. In order to
+  build with other toolchains you must install them to ``chr/toolchains/``
+
+* Most of the predefined configurations in ``chr/configs`` were tested with
+  "baikal-rootfs-chromedeps" sysyroot that can be assembled as described above.
+
+* If directory `chr/chromium/src` missing, then ``build.sh`` will automatically
+  clone chromium sources to ``chr/chromium/src``. Chromium repo have huge
+  size(about 17GB), so it may take long time. If you already have chromium
+  checkout you can manualy copy (or symlink) it to `chr/chromium`.
+
+* Note that build script automatically makes checkout to specified commit/tag
+  and discards all uncommited cahnges and removes all untracked files/dirs, so
+  be carefull!
+
 How to build
 ------------
 
