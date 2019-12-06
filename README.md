@@ -32,14 +32,14 @@ between Debian 8.6 and Debian buster, but most of newer versions of the older
 packages were found without problem.  Maybe we do not need all of them, but
 having all of the does not hurt.  It is better than discovering build
 dependencies one-by-one after each chromium build failure.  The name of the
-rootfs tar ball is baikal-rootfs-chromedeps-buster.tar.gz
+rootfs tarball is baikal-rootfs-chromedeps-buster.tar.gz
 Untar rootfs to chr/sysroots.
 
 Toolchain
 ---------
 
-The GCC cross toolchain is taken from FreeElectrons site, the target
-was MIPS 32r5, the bleeding edge version, as of January 2019:
+The GCC cross-toolchain is taken from FreeElectrons (now bootlin) site, the
+target was MIPS32r5, the bleeding edge version, as of January 2019:
 
 mips32r5el--glibc--bleeding-edge-2018.11-1.tar.bz2
 
@@ -104,13 +104,13 @@ Install docker and read this readme completely before start.
 * Most of the predefined configurations in ``chr/configs`` were tested with
   "baikal-rootfs-chromedeps" sysyroot that can be assembled as described above.
 
-* If directory `chr/chromium/src` missing, then ``build.sh`` will automatically
+* If directory `chr/chromium/src` is missing, then ``build.sh`` will automatically
   clone chromium sources to ``chr/chromium/src``. Chromium repo have huge
   size(about 17GB), so it may take long time. If you already have chromium
   checkout you can manualy copy (or symlink) it to `chr/chromium`.
 
 * Note that build script automatically makes checkout to specified commit/tag
-  and discards all uncommited cahnges and removes all untracked files/dirs, so
+  and discards all uncommited changes and removes all untracked files/dirs, so
   be carefull!
 
 How to build
@@ -174,8 +174,12 @@ the Chromium sources are the following:
 - SIMD accelerations were considered only for arm and x86_64. 
   For mips, build scripts mostly use generic mips32 target 
   or mips32r2 without MSA or even DSP/DSPr2.
-- Chromium uses it's own build scripts for most of third-party libs, 
-  including ffmpeg, libjpeg-turbo, libpng and libvpx. 
+
+- Chromium uses it's own build/configuration scripts for most of third-party
+  libs, including ffmpeg, libjpeg-turbo, libpng and libvpx.  So, if you have one
+of these MSA-enabled libraries installed system-wide, it may not get used.
+Configure MSA support for these libs explicitly via the Chromium configuration
+process.
 
 For example, as noted in scripts for ffmpeg:
 
