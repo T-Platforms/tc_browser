@@ -26,14 +26,13 @@ Rootfs
 The rootfs was assembled in the following way. We take the current Debian buster
 from http://update.t-platforms.ru/dists/debian/buster-new, with the SIMD-enabled
 ffmpeg, libjpeg-turbo, libpng and other libraries. It is based on libc 2.27.
-Then we add the *-dev deb packages that we present in the Debian 8.6 rootfs used
-in the past to build Chromium 57. The packages and the versions changed somewhat
-between Debian 8.6 and Debian buster, but most of newer versions of the older
-packages were found without problem.  Maybe we do not need all of them, but
-having all of the does not hurt.  It is better than discovering build
-dependencies one-by-one after each chromium build failure.  The name of the
-rootfs tarball is baikal-rootfs-chromedeps-buster.tar.gz
-Untar rootfs to chr/sysroots.
+Then we add the *-dev deb packages that were present in the Debian 8.6 rootfs
+used in the past to build Chromium 57. The packages and the versions changed
+somewhat between Debian 8.6 and Debian buster, but most of newer versions of the
+older packages were found without problem.  Maybe we do not need all of them,
+but having them does not hurt.  It is better than discovering build dependencies
+one-by-one after each chromium build failure.  The name of the rootfs tarball
+is baikal-rootfs-chromedeps-buster.tar.gz Untar rootfs to chr/sysroots.
 
 Toolchain
 ---------
@@ -98,18 +97,18 @@ Install docker and read this readme completely before start.
   It is sufficient for building chromium of 54-57 versions, and was also used to
   build Chromium 71 with newer toolchains added locally.
 
-* Docker image already contains gcc-5.4 croos compilation toolchain. In order to
+* Docker image only contains gcc-5.4 cross toolchain. In order to
   build with other toolchains you must install them to ``chr/toolchains/``
 
 * Most of the predefined configurations in ``chr/configs`` were tested with
   "baikal-rootfs-chromedeps" sysyroot that can be assembled as described above.
 
-* If directory `chr/chromium/src` is missing, then ``build.sh`` will automatically
+* If the directory `chr/chromium/src` is missing, then ``build.sh`` will automatically
   clone chromium sources to ``chr/chromium/src``. Chromium repo have huge
   size(about 17GB), so it may take long time. If you already have chromium
   checkout you can manualy copy (or symlink) it to `chr/chromium`.
 
-* Note that build script automatically makes checkout to specified commit/tag
+* Note that the build script automatically makes checkout to specified commit/tag
   and discards all uncommited changes and removes all untracked files/dirs, so
   be carefull!
 
@@ -172,7 +171,7 @@ mips_use_msa and libyuv_use_msa.  Main problems with mips32r5 support in
 the Chromium sources are the following:
 
 - SIMD accelerations were considered only for arm and x86_64. 
-  For mips, build scripts mostly use generic mips32 target 
+  For MIPS, build scripts mostly use generic mips32 target 
   or mips32r2 without MSA or even DSP/DSPr2.
 
 - Chromium uses it's own build/configuration scripts for most of third-party
@@ -181,7 +180,7 @@ of these MSA-enabled libraries installed system-wide, it may not get used.
 Configure MSA support for these libs explicitly via the Chromium configuration
 process.
 
-For example, as noted in scripts for ffmpeg:
+For example, as noted in the scripts for ffmpeg:
 
 "Creates a GN include file for building FFmpeg from source.
 The way this works is a bit silly but it's easier than reverse engineering
@@ -200,12 +199,12 @@ Same approach used in building libvpx etc.
 - Using v8_context_snapshot caused FTBFS because linker could not link 
   MSA-enabled libjpeg-turbo and libpng to final binary.
 - It seems that Google's toolchain used some kind of patched GCC 
-  that has it's own implementation of MSA.h, because it have at least
+  that has it's own implementation of MSA.h, because it has at least
   4 vector cast function declarations that was unavailable on debian's GCC.
 - libvpx configuration and build scripts completely ignored any MSA functionality.
 
 Workaround for ffmpeg was done by using config.h from the build made on mitx,
-then patching pregenerated includes list to add every MSA-related sources and
+then patching pre-generated includes list to add every MSA-related sources and
 also patching build script with flags from mitx native build.  Related patches
 are named starting with 'ffmpeg'.  Resulting binary should be able to play 720p
 videos with about half of frames being skipped, but without considerable lags of
@@ -213,7 +212,7 @@ playback.
 
 Blink workaround for missing MSA vector cast was done by replacing it with upstream one.
 
-Linkage of MSA-enabled libjpeg-turbo and libpng fixed with disabling v8_context_snapsot.
+The linkage of MSA-enabled libjpeg-turbo and libpng fixed with disabling v8_context_snapsot.
 For libpng, there's also a pacth that disables check for mips32r6 when using mips_use_msa option.
 
 NOTE FOR INCREMENTAL BUILDS:

@@ -29,11 +29,11 @@ cd to repo dir
 
     cd /ff/firefox
 
-take a look at curent config
+take a look at the current config
 
     cat mozconfig
 
-take a look at curent revison
+take a look at the current revison
 
     hg id
 
@@ -55,7 +55,7 @@ then exit from the container.
 
 ## Finish
 
-Your bild is ready. You can find resulting archive in:
+Your build is ready. You can find resulting archive in:
 
     firefox_workdir/firefox/obj-firefox/dist/firefox-52.0a1.en-US.linux-mipsel.tar.bz2
 
